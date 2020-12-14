@@ -1,6 +1,7 @@
 // banana blueberry mango apple pineapple strawberry orange grape watermelon tomato
 const products = [
   {
+    _id: '1',
     name: 'Banana',
     image: '/images/banana.jpg',
     brand: 'Brand B',
@@ -14,6 +15,7 @@ const products = [
   },
 
   {
+    _id: '2',
     name: 'Blueberry',
     image: '/images/blueberry.jpg',
     brand: 'Brand B',
@@ -27,6 +29,7 @@ const products = [
   },
 
   {
+    _id: '3',
     name: 'Mango',
     image: '/images/mango.jpg',
     brand: 'Brand M',
@@ -40,6 +43,7 @@ const products = [
   },
 
   {
+    _id: '4',
     name: 'Apple',
     image: '/images/apple.jpg',
     brand: 'Brand A',
@@ -53,6 +57,7 @@ const products = [
   },
 
   {
+    _id: '5',
     name: 'Pineapple',
     image: '/images/pineapple.jpg',
     brand: 'Brand P',
@@ -66,6 +71,7 @@ const products = [
   },
 
   {
+    _id: '6',
     name: 'Strawberry',
     image: '/images/strawberry.jpg',
     brand: 'Brand S',
@@ -79,6 +85,7 @@ const products = [
   },
 
   {
+    _id: '7',
     name: 'Orange',
     image: '/images/orange.jpg',
     brand: 'Brand B',
@@ -92,6 +99,7 @@ const products = [
   },
 
   {
+    _id: '8',
     name: 'Grape',
     image: '/images/grape.jpg',
     brand: 'Brand B',
@@ -105,6 +113,7 @@ const products = [
   },
 
   {
+    _id: '9',
     name: 'Watermelon',
     image: '/images/watermelon.jpg',
     brand: 'Brand B',
@@ -118,6 +127,7 @@ const products = [
   },
 
   {
+    _id: '10',
     name: 'Tomato',
     image: '/images/tomato.jpg',
     brand: 'Brand B',
@@ -130,3 +140,5 @@ const products = [
     numReviews: 50,
   },
 ];
+
+export default products;

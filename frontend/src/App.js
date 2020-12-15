@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { Provider } from 'react-redux';
-import './bootstrap.min.css'; // bootswatch
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
@@ -23,9 +21,9 @@ const App = () => {
             <Route exact path='/about' component={AboutScreen} />
             <Route exact path='/missions' component={MissionsScreen} />
             <Route exact path='/contact' component={ContactScreen} />
-            <Route path='/cart' component={CartScreen} />
             <Route path='/profile' component={ProfileScreen} />
             <Route path='/product/:id' component={ProductScreen} />
+            <Route path='/cart/:id?' component={CartScreen} />
           </Container>
         </main>
         <Footer />

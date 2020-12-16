@@ -12,7 +12,7 @@ import {
   Button,
   Card,
 } from 'react-bootstrap';
-import { addToCart } from '../actions/cartActions';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id;
@@ -29,13 +29,15 @@ const CartScreen = ({ match, location, history }) => {
   const { cartItems } = cart;
 
   useEffect(() => {
-    dispatch(addToCart(productId, qty));
+    if (productId) {
+      dispatch(addToCart(productId, qty));
+    }
   }, [dispatch, productId, qty]);
 
   const maxQtyPerOrder = 10;
 
   const removeFromCartHandler = id => {
-    console.log('er');
+    dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = e => {
@@ -75,7 +77,7 @@ const CartScreen = ({ match, location, history }) => {
                   <Col md={2}>
                     <Form.Control
                       as='select'
-                      value={qty}
+                      value={cartItem.qty}
                       onChange={e =>
                         dispatch(
                           addToCart(cartItem.product, Number(e.target.value))
@@ -94,7 +96,7 @@ const CartScreen = ({ match, location, history }) => {
                     <Button
                       type='button'
                       variant='light'
-                      onClick={removeFromCartHandler(cartItem.product)}
+                      onClick={() => removeFromCartHandler(cartItem.product)}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>

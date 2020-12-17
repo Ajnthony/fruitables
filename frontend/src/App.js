@@ -7,8 +7,10 @@ import AboutScreen from './screens/AboutScreen';
 import MissionsScreen from './screens/MissionsScreen';
 import ContactScreen from './screens/ContactScreen';
 import CartScreen from './screens/CartScreen';
-import ProfileScreen from './screens/ProfileScreen';
 import ProductScreen from './screens/ProductScreen';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
             <Route exact path='/about' component={AboutScreen} />
             <Route exact path='/missions' component={MissionsScreen} />
             <Route exact path='/contact' component={ContactScreen} />
+            <Route path='/login' component={LoginScreen} />
+            <Route path='/register' component={RegisterScreen} />
             <Route path='/profile' component={ProfileScreen} />
             <Route path='/product/:id' component={ProductScreen} />
             <Route path='/cart/:id?' component={CartScreen} />

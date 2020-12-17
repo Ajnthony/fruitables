@@ -34,7 +34,9 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.pre('save', async function (next) {
+  // if password is not modified,
   if (!this.isModified('password')) {
+    // then just move on: don't hash it again
     next();
   }
 

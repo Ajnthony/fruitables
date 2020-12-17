@@ -32,7 +32,7 @@ const authUser = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
-  const userExists = await user.findOne({ email });
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
@@ -47,13 +47,12 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
+  // gets logged in after registration
   if (user) {
     res.status(201).json({
       _id: user._id,
-      firstName:
-        firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
-      lastName:
-        lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
@@ -68,14 +67,12 @@ const registerUser = asyncHandler(async (req, res) => {
 // GET /api/users/profile
 // Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = User.findById(req.user._id); // currently logged in user's id
+  const user = await User.findById(req.user._id); // currently logged in user's id
   if (user) {
     res.json({
       _id: user._id,
-      firstName:
-        firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
-      lastName:
-        lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -103,10 +100,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     res.json({
       _id: user._id,
-      firstName:
-        firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
-      lastName:
-        lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),

@@ -22,6 +22,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 
+// PayPal
+app.get('/api/config/paypal', (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID);
+});
+
 // handling not found and custom error
 app.use(notFound);
 app.use(errorHandler);

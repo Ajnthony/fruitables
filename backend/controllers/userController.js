@@ -86,11 +86,15 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // PUT /api/users/profile
 // Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = User.findById(req.user._id);
+  const user = await User.findById(req.user._id);
 
   if (user) {
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
+    user.firstName =
+      req.body.firstName.charAt(0).toUpperCase() +
+        req.body.firstName.slice(1).toLowerCase() || user.firstName;
+    user.lastName =
+      req.body.lastName.charAt(0).toUpperCase() +
+        req.body.lastName.slice(1).toLowerCase() || user.lastName;
     user.email = req.body.email || user.email;
     if (req.body.password) {
       user.password = req.body.password;

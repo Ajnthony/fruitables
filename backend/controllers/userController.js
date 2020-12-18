@@ -116,4 +116,80 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUserProfile, updateUserProfile };
+// Get all users' profile
+// GET /api/users
+// Private/admin
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
+
+// Delete a user
+// DELETE /api/users/:id
+// Private/admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    await user.remove();
+    res.json({ message: 'Successfully deleted the user' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// Get a user by her/his id
+// GET /api/users/:id
+// Private/admin
+const getAUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password');
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// Update user's profile
+// PUT /api/users/:id
+// Private/admin
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.firstName =
+      req.body.firstName.charAt(0).toUpperCase() +
+        req.body.firstName.slice(1).toLowerCase() || user.firstName;
+    user.lastName =
+      req.body.lastName.charAt(0).toUpperCase() +
+        req.body.lastName.slice(1).toLowerCase() || user.lastName;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+export {
+  authUser,
+  registerUser,
+  getUserProfile,
+  updateUserProfile,
+  getAllUsers,
+  deleteUser,
+  getAUserById,
+  updateUser,
+};

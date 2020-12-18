@@ -6,6 +6,7 @@ import { logout } from '../actions/userActions';
 
 const Header = () => {
   const dispatch = useDispatch();
+
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -48,6 +49,22 @@ const Header = () => {
                     <i className='fas fa-user'></i> Sign in
                   </Nav.Link>
                 </LinkContainer>
+              )}
+
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title='Admin' id='adminMenu'>
+                  <LinkContainer to='/admin/userslist'>
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+
+                  <LinkContainer to='/admin/productslist'>
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+
+                  <LinkContainer to='/admin/ordersslist'>
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
               )}
 
               <NavDropdown title='More...' id='basic-nav-dropdown'>

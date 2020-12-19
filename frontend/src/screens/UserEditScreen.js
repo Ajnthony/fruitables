@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { getUserDetail } from '../actions/userActions';
+import { getUserDetail, adminUpdateUser } from '../actions/userActions';
+import { ADMIN_UPDATE_USER_RESET } from '../constants/userConstants';
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
@@ -20,92 +21,96 @@ const UserEditScreen = ({ match, history }) => {
   const userDetail = useSelector(state => state.userDetail);
   const { loading, error, user } = userDetail;
 
-  useEffect(() => {}, []);
+  const adminUserUpdate = useSelector(state => state.adminUserUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = adminUserUpdate;
+
+  useEffect(() => {
+    if (successUpdate) {
+      dispatch({ type: ADMIN_UPDATE_USER_RESET });
+      history.push('/admin/userslist');
+    } else {
+      if (!user.firstName || !user.lastName || user._id !== userId) {
+        dispatch(getUserDetail(userId));
+      } else {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setEmail(user.email);
+        setIsAdmin(user.isAdmin);
+      }
+    }
+  }, [dispatch, user, userId, successUpdate, history]);
 
   const submitHandler = e => {
     e.preventDefault();
-    setMessage(null);
-
-    if (!firstName || !lastName || !password || !confirmPassword) {
-      setMessage('All fields are required');
-    } else if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-    } else {
-      dispatch(register(firstName, lastName, email, password));
-    }
+    dispatch(adminUpdateUser({ _id: userId, firstName, lastName, isAdmin }));
   };
 
   return (
-    <FormContainer>
-      <h1>Sign up</h1>
-      {message && <Message variant='danger'>{message}</Message>}
-      {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='firstName'>
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            type='name'
-            placeholder='Enter your first name'
-            value={firstName}
-            onChange={e => setFirstName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+    <>
+      <Link to='/admin/userslist' className='btn btn-light my-3'>
+        Go back
+      </Link>
 
-        <Form.Group controlId='lastName'>
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            type='name'
-            placeholder='Enter your last name'
-            value={lastName}
-            onChange={e => setLastName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+      <FormContainer>
+        <h1>Edit user</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant='danger'>{error}</Message>
+        ) : (
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId='firstName'>
+              <Form.Label>First name</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter your first name'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId='email'>
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type='email'
-            placeholder='Enter email address'
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId='lastName'>
+              <Form.Label>Last name</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter your last name'
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId='email'>
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Enter email address'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId='confirmPassword'>
-          <Form.Label>Confirm password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Confirm password'
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            <Form.Group controlId='isadmin'>
+              <Form.Check
+                type='checkbox'
+                label='Admin user?'
+                value={isAdmin}
+                onChange={e => setIsAdmin(e.target.checked)}
+              ></Form.Check>
+            </Form.Group>
 
-        <Button type='submit' variant='primary'>
-          Register
-        </Button>
-      </Form>
-
-      <Row className='py-3'>
-        <Col>
-          Have an account?{' '}
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
-            Update
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+            <Button type='submit' variant='primary'>
+              Update
+            </Button>
+          </Form>
+        )}
+      </FormContainer>
+    </>
   );
 };
 

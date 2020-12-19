@@ -4,7 +4,12 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listProducts } from '../actions/productActions';
+import {
+  listProducts,
+  deleteProductAdmin,
+  createProductAdmin,
+} from '../actions/productActions';
+import { ADMIN_CREATE_PRODUCT_RESET } from '../constants/productConstants';
 
 const ProductsListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
@@ -12,32 +17,60 @@ const ProductsListScreen = ({ history, match }) => {
   const productList = useSelector(state => state.productList);
   const { loading, error, products } = productList;
 
+  const adminDeleteProduct = useSelector(state => state.adminDeleteProduct);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = adminDeleteProduct;
+
+  const adminCreateProduct = useSelector(state => state.adminCreateProduct);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = adminCreateProduct;
+
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    dispatch({ type: ADMIN_CREATE_PRODUCT_RESET });
+
+    if (!userInfo.isAdmin) {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo]);
+
+    if (successCreate) {
+      history.push(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts());
+    }
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successCreate,
+    successDelete,
+    createdProduct,
+  ]);
 
   const deleteProductHandler = id => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      // delete a product
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      dispatch(deleteProductAdmin(id));
     }
   };
 
-  const createProductHandler = product => {
-    // create a product
+  const createProductHandler = () => {
+    dispatch(createProductAdmin());
   };
 
   return (
     <>
       <Row className='align-items-center'>
         <Col>
-          <h1></h1>
+          <h1>Products</h1>
         </Col>
         <Col className='text-right'>
           <Button className='my-3' onClick={createProductHandler}>
@@ -45,6 +78,12 @@ const ProductsListScreen = ({ history, match }) => {
           </Button>
         </Col>
       </Row>
+
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
       {loading ? (
         <Loader />

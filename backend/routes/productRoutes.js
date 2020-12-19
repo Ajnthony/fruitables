@@ -3,16 +3,17 @@ const router = express.Router();
 import {
   getProducts,
   getProductById,
+  deleteProduct,
+  updateProduct,
+  createProduct,
 } from '../controllers/productController.js';
+import { protect, admin } from '../middleware/authMiddleware.js';
 
-// Get all products
-// GET /api/products
-// Public
-router.route('/').get(getProducts);
-
-// Get a product by its id
-// GET /api/products/:id
-// Public
-router.route('/:id').get(getProductById);
+router.route('/').get(getProducts).post(protect, admin, createProduct);
+router
+  .route('/:id')
+  .get(getProductById)
+  .delete(protect, admin, deleteProduct)
+  .put(protect, admin, updateProduct);
 
 export default router;

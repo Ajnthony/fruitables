@@ -6,6 +6,12 @@ import {
   PRODUCT_DETAIL_REQUEST,
   PRODUCT_DETAIL_SUCCESS,
   PRODUCT_DETAIL_FAIL,
+  ADMIN_DELETE_PRODUCT_REQUEST,
+  ADMIN_DELETE_PRODUCT_SUCCESS,
+  ADMIN_DELETE_PRODUCT_FAIL,
+  ADMIN_CREATE_PRODUCT_REQUEST,
+  ADMIN_CREATE_PRODUCT_SUCCESS,
+  ADMIN_CREATE_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const listProducts = () => async dispatch => {
@@ -38,6 +44,71 @@ export const getProductDetail = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAIL_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteProductAdmin = id => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_DELETE_PRODUCT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.delete(`/api/products/${id}`, config);
+
+    dispatch({
+      type: ADMIN_DELETE_PRODUCT_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_DELETE_PRODUCT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const createProductAdmin = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_CREATE_PRODUCT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post('/api/products', {}, config);
+
+    dispatch({
+      type: ADMIN_CREATE_PRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_CREATE_PRODUCT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

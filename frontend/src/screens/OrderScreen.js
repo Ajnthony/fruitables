@@ -2,19 +2,29 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { Link } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrderDetail, payOrder } from '../actions/orderActions';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import {
+  getOrderDetail,
+  payOrder,
+  deliverOrder,
+} from '../actions/orderActions';
+import {
+  ORDER_PAY_RESET,
+  ADMIN_OUT_FOR_DELIVERY_RESET,
+} from '../constants/orderConstants';
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id;
 
   const [sdkReady, setSdkReady] = useState(false);
 
   const dispatch = useDispatch();
+
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
 
   const orderDetail = useSelector(state => state.orderDetail);
   const { order, loading, error } = orderDetail;
@@ -22,11 +32,22 @@ const OrderScreen = ({ match }) => {
   const orderToPaid = useSelector(state => state.orderToPaid);
   const { loading: loadingToPaid, success: successToPaid } = orderToPaid;
 
+  const orderToOutForDelivery = useSelector(
+    state => state.orderToOutForDelivery
+  );
+  const {
+    loading: loadingToOutForDelivery,
+    success: successToOutForDelivery,
+  } = orderToOutForDelivery;
+
   const addDecimals = num => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push('/login');
+    }
     // PayPal
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -40,8 +61,14 @@ const OrderScreen = ({ match }) => {
       document.body.appendChild(script);
     };
 
-    if (!order || order._id !== orderId || successToPaid) {
+    if (
+      !order ||
+      order._id !== orderId ||
+      successToPaid ||
+      successToOutForDelivery
+    ) {
       dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ADMIN_OUT_FOR_DELIVERY_RESET });
       dispatch(getOrderDetail(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -50,11 +77,15 @@ const OrderScreen = ({ match }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, order, orderId, successToPaid]);
+  }, [dispatch, order, orderId, successToPaid, successToOutForDelivery]);
 
   const successPaymentHandler = paymentResult => {
     console.log(paymentResult);
     dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   return loading ? (
@@ -192,6 +223,22 @@ const OrderScreen = ({ match }) => {
                   )}
                 </ListGroup.Item>
               )}
+
+              {loadingToOutForDelivery && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark as out for delivery
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

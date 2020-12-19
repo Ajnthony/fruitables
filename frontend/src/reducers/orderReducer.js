@@ -16,6 +16,10 @@ import {
   ADMIN_GET_ALL_ORDERS_REQUEST,
   ADMIN_GET_ALL_ORDERS_SUCCESS,
   ADMIN_GET_ALL_ORDERS_FAIL,
+  ADMIN_OUT_FOR_DELIVERY_REQUEST,
+  ADMIN_OUT_FOR_DELIVERY_SUCCESS,
+  ADMIN_OUT_FOR_DELIVERY_FAIL,
+  ADMIN_OUT_FOR_DELIVERY_RESET,
 } from '../constants/orderConstants';
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -56,6 +60,21 @@ export const orderToPaidReducer = (state = {}, action) => {
     case ORDER_PAY_FAIL:
       return { loading: false, error: action.payload };
     case ORDER_PAY_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const orderToOutForDeliveryReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADMIN_OUT_FOR_DELIVERY_REQUEST:
+      return { loading: true };
+    case ADMIN_OUT_FOR_DELIVERY_SUCCESS:
+      return { loading: false, success: true };
+    case ADMIN_OUT_FOR_DELIVERY_FAIL:
+      return { loading: false, error: action.payload };
+    case ADMIN_OUT_FOR_DELIVERY_RESET:
       return {};
     default:
       return state;

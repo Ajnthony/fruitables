@@ -12,6 +12,9 @@ import {
   ADMIN_CREATE_PRODUCT_REQUEST,
   ADMIN_CREATE_PRODUCT_SUCCESS,
   ADMIN_CREATE_PRODUCT_FAIL,
+  ADMIN_UPDATE_PRODUCT_REQUEST,
+  ADMIN_UPDATE_PRODUCT_SUCCESS,
+  ADMIN_UPDATE_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const listProducts = () => async dispatch => {
@@ -109,6 +112,44 @@ export const createProductAdmin = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADMIN_CREATE_PRODUCT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateProductAdmin = product => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_UPDATE_PRODUCT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/products/${product._id}`,
+      product,
+      config
+    );
+
+    dispatch({
+      type: ADMIN_UPDATE_PRODUCT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_UPDATE_PRODUCT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

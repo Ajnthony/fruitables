@@ -15,6 +15,8 @@ import Message from '../components/Message';
 import Rating from '../components/Rating';
 import { getProductDetail } from '../actions/productActions';
 
+// reviews to be added
+
 const ProductScreen = ({ match, history }) => {
   const [qty, setQty] = useState(1);
 

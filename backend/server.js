@@ -36,10 +36,6 @@ app.get('/api/config/paypal', (req, res) => {
 // making uploads & build folder static - accessible
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
-app.use(
-  '/frontend/public/images',
-  express.static(path.join(__dirname, 'images'))
-);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'frontend/build')));

@@ -28,12 +28,8 @@ const App = () => {
         <Header />
         <main className='py-3'>
           <Container>
-            <Route exact path='/' component={HomeScreen} />
-            <Route exact path='/about' component={AboutScreen} />
-            <Route exact path='/missions' component={MissionsScreen} />
-            <Route exact path='/contact' component={ContactScreen} />
-            <Route path='/shipping' component={ShippingScreen} />
             <Route path='/order/:id' component={OrderScreen} />
+            <Route path='/shipping' component={ShippingScreen} />
             <Route path='/payment' component={PaymentScreen} />
             <Route path='/placeorder' component={PlaceOrderScreen} />
             <Route path='/login' component={LoginScreen} />
@@ -43,12 +39,32 @@ const App = () => {
             <Route path='/cart/:id?' component={CartScreen} />
             <Route path='/admin/userslist' component={UsersListScreen} />
             <Route path='/admin/user/:id/edit' component={UserEditScreen} />
-            <Route path='/admin/productslist' component={ProductsListScreen} />
-            <Route path='/admin/orderslist' component={OrdersListScreen} />
+            <Route
+              exact
+              path='/admin/productslist'
+              component={ProductsListScreen}
+            />
+            <Route
+              exact
+              path='/admin/productslist/:pageNumber'
+              component={ProductsListScreen}
+            />
             <Route
               path='/admin/product/:id/edit'
               component={ProductEditScreen}
             />
+            <Route path='/admin/orderslist' component={OrdersListScreen} />
+            <Route exact path='/search/:keyword' component={HomeScreen} />
+            <Route exact path='/' component={HomeScreen} />
+            <Route exact path='/page/:pageNumber' component={HomeScreen} />
+            <Route
+              exact
+              path='/search/:keyword/page/:pageNumber'
+              component={HomeScreen}
+            />
+            <Route exact path='/about' component={AboutScreen} />
+            <Route exact path='/missions' component={MissionsScreen} />
+            <Route exact path='/contact' component={ContactScreen} />
           </Container>
         </main>
         <Footer />

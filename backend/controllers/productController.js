@@ -2,12 +2,39 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
 // Get all products
-// GET /api/products
+// GET /api/products?${keyword}
 // Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const itemsOnPage = 8;
+  const page = Number(req.query.pageNumber) || 1;
 
-  res.json(products);
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i', // case insensitive
+        },
+      }
+    : {};
+
+  /* // Thank you Viktoras from Q&A!
+  // use the next line in SearchBox.js
+  const query = search
+    ? {
+        name: {
+          $regex: search.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'),
+          $options: 'i',
+        },
+      }
+    : {}; */
+
+  const count = await Product.countDocuments({ ...keyword });
+
+  const products = await Product.find({ ...keyword })
+    .limit(itemsOnPage)
+    .skip(itemsOnPage * (page - 1));
+
+  res.json({ products, page, pages: Math.ceil(count / itemsOnPage) });
 });
 
 // Get a product by its id
@@ -94,7 +121,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 // Create a review
-// POT /api/products/:id/reviews
+// POST /api/products/:id/reviews
 // Private/
 const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
@@ -135,6 +162,15 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
+// Get {five} top rated products
+// GET /api/products/top
+// Public
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(5);
+
+  res.json(products);
+});
+
 export {
   getProducts,
   getProductById,
@@ -142,4 +178,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 };

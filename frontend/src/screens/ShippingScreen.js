@@ -73,8 +73,9 @@ const ShippingScreen = ({ history }) => {
           <Form.Label>State</Form.Label>
           <Form.Control
             as='select'
-            placeholder='Enter state'
-            value={state}
+            value={country !== 'South Korea' ? state : null}
+            disabled={country === 'South Korea'}
+            defaultValue='Choose state...'
             required
             onChange={e => setState(e.target.value)}
           >
@@ -104,6 +105,7 @@ const ShippingScreen = ({ history }) => {
           <Form.Control
             as='select'
             value={country}
+            defaultValue='United States'
             required
             onChange={e => setCountry(e.target.value)}
           >
@@ -111,6 +113,7 @@ const ShippingScreen = ({ history }) => {
               Choose country...
             </option>
             <option value='United States'>United States</option>
+            <option value='South Korea'>South Korea</option>
           </Form.Control>
         </Form.Group>
 

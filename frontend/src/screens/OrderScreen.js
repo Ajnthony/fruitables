@@ -120,7 +120,7 @@ const OrderScreen = ({ match, history }) => {
                 {order.shippingAddress.address2 &&
                   order.shippingAddress.address + ', '}
                 {order.shippingAddress.city}, {order.shippingAddress.zipCode},{' '}
-                {order.shippingAddress.country}
+                {order.shippingAddress.state} {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>

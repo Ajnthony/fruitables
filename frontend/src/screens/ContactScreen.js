@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { FormContainer, Form, Image, Row, Col } from 'react-bootstrap';
+import { Form, Image, Row, Col, Button } from 'react-bootstrap';
+import FormContainer from '../components/FormContainer';
+import Message from '../components/Message';
 import contactus from './contactus.jpg';
 
 const ContactScreen = () => {
@@ -19,16 +21,25 @@ const ContactScreen = () => {
       setMessage('*: required field');
     } else {
       setMessage(
-        'Thank you for showing your interest in us! Actually, this is just a pop up message and nothing has been submitted.'
+        "Thank you for showing your interest in us! Actually, this is just a pop up message and nothing has been submitted; so you don't have to be concerned!"
       );
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setJobTitle('');
+      setPhoneNumber('');
+      setSpecies('');
     }
   };
 
   return (
     <>
-      <Image src={contactus} alt='contactus' rounded fluid />
+      <FormContainer>
+        <Image src={contactus} alt='contactus' className='my-5' rounded fluid />
+      </FormContainer>
+
       <Row>
-        <Col md={9}>
+        <Col md={7} className='mb-3'>
           <h1>Fruits, veggies, and people.</h1>
           <p>
             Obviously we love fruits and veggies, but that doesn't mean we love
@@ -38,15 +49,46 @@ const ContactScreen = () => {
           </p>
           <h2>Talk to us. You have questions? We have answers.</h2>
           <p>
-            Questions about quality? How our products are produced, treated and
-            delivered? Or about whole food plant based diet? Just ask us.
+            Questions about our products, or something else? Just ask us. Once a
+            famous poet said:
           </p>
           <p>
-            As the creator of this website, I can even give you my secret
-            detail, which is &#123;available for paid members only&#125;
+            <em>
+              "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem
+              id pariatur veniam dolores illum? Ullam voluptatum similique eos
+              earum tempora eveniet dolor soluta ducimus laborum dolores quo
+              illum nemo nobis numquam enim quaerat, impedit reiciendis! Sit
+              optio nemo hic voluptate iure animi delectus, nostrum, sequi
+              ullam, error iusto blanditiis ad."
+            </em>
+          </p>
+          <p>
+            <em>
+              "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet
+              vel cupiditate nostrum libero sapiente sunt, ipsum eos rem sequi
+              similique dolores itaque ut sed! Sapiente vero temporibus et,
+              pariatur sit, atque fugiat voluptatem tenetur corrupti doloribus
+              aut, soluta ex laboriosam"
+            </em>
+            , which is supported by the following:
+          </p>
+          <p>
+            <em>
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Laboriosam accusantium magni at doloribus ipsa, quibusdam quod
+              asperiores. Quasi beatae ullam porro at modi, perspiciatis sed
+              cumque obcaecati. Tempore adipisci minus similique?"
+            </em>
+          </p>
+          <p>
+            ...so, er...you get the idea of how open I am to you, right? As the
+            creator of this website, I can even give you my secret detail, such
+            as &#123;** **&#125;, which is &#123;** available for paid members
+            only **&#125;
           </p>
         </Col>
-        <Col md={3}>
+
+        <Col md={{ span: 4, offset: 1 }} className='my-3'>
           <h2>Office address</h2>
           <p>1000 Somewhere St. Random City, CA 00000</p>
 
@@ -64,78 +106,95 @@ const ContactScreen = () => {
         </Col>
       </Row>
 
-      <Row>
-        {message && <Message variant='danger'>{message}</Message>}
-        <FormContainer>
-          <Col md={6}>
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId='firstName'>
-                <Form.Label>First name *</Form.Label>
-                <Form.Control
-                  type='name'
-                  placeholder='Enter your first name'
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='lastName'>
-                <Form.Label>Last name *</Form.Label>
-                <Form.Control
-                  type='name'
-                  placeholder='Enter your last name'
-                  value={lastName}
-                  onChange={e => setLastName(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='email'>
-                <Form.Label>Email address *</Form.Label>
-                <Form.Control
-                  type='email'
-                  placeholder='Enter email address'
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-            </Form>
-          </Col>
-
-          <Col md={6}>
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId='jobTitle'>
-                <Form.Label>Job title *</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter your job title'
-                  value={jobTitle}
-                  onChange={e => setjobTitle(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='phoneNumber'>
-                <Form.Label>Phone number *</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter your phone number'
-                  value={phoneNumber}
-                  onChange={e => setPhoneNumber(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='species'>
-                <Form.Label>Species</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter your species'
-                  value={species}
-                  onChange={e => setSpecies(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-            </Form>
-          </Col>
-        </FormContainer>
+      <Row className='justify-content-center my-3'>
+        <Col md={6} className={message === null ? 'border-top py-3' : ''}>
+          {message && (
+            <Message variant={message.startsWith('*') ? 'danger' : 'success'}>
+              {message}
+            </Message>
+          )}
+        </Col>
       </Row>
+
+      <Form onSubmit={submitHandler}>
+        <Row className='justify-content-center'>
+          <Col md={4}>
+            <Form.Group controlId='firstName'>
+              <Form.Label>First name *</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter your first name'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='lastName'>
+              <Form.Label>Last name *</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter your last name'
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='email'>
+              <Form.Label>Email address *</Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Enter email address'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+          </Col>
+
+          <Col md={4}>
+            <Form.Group controlId='jobTitle'>
+              <Form.Label>Job title *</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter your job title'
+                value={jobTitle}
+                onChange={e => setJobTitle(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='phoneNumber'>
+              <Form.Label>Phone number *</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter your phone number'
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='species'>
+              <Form.Label>Species</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter your species'
+                value={species}
+                onChange={e => setSpecies(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className='justify-content-center'>
+          <Col md={4}>
+            <Button
+              type='submit'
+              variant='primary'
+              className='btn btn-block my-3'
+            >
+              Submit
+            </Button>
+          </Col>
+        </Row>
+      </Form>
     </>
   );
 };

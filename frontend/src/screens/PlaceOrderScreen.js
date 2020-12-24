@@ -64,8 +64,10 @@ const PlaceOrderScreen = ({ history }) => {
               <p>
                 <strong>Address: </strong>
                 {shippingAddress.address1}{' '}
-                {shippingAddress.address2 && shippingAddress.address + ', '}
-                {shippingAddress.city}, {shippingAddress.state}{' '}
+                {shippingAddress.address2 && shippingAddress.address2 + ', '}
+                {shippingAddress.city},{' '}
+                {shippingAddress.country === 'United States' &&
+                  shippingAddress.state}{' '}
                 {shippingAddress.zipCode}, {shippingAddress.country}
               </p>
             </ListGroup.Item>

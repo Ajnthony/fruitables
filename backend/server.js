@@ -44,7 +44,9 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   );
 } else {
-  app.get('/', (req, res) => res.send('API is running'));
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
 }
 
 // handling not found and custom error
@@ -52,6 +54,4 @@ app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, (req, res) =>
-  console.log(`Server running on port ${PORT}...`)
-);
+app.listen(PORT, console.log(`Server running on port ${PORT}...`));

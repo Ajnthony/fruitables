@@ -30,7 +30,7 @@ const AboutScreen = () => {
       </Row>
 
       <Row className='justify-content-center'>
-        <Image src={frugi} alt='fruits and vegetables' />
+        <Image src={frugi} alt='fruits and vegetables' fluid />
       </Row>
 
       <Row className='my-5'>

@@ -1,21 +1,25 @@
-export const Apple = require('./images/apple.jpg');
-export const BabySpinach = require('./images/babyspinach.jpg');
-export const Banana = require('./images/banana.jpg');
-export const Blueberry = require('./images/blueberry.jpg');
-export const Broccoli = require('./images/broccoli.jpg');
-export const Cabbage = require('./images/cabbage.jpg');
-export const Carrot = require('./images/carrot.jpg');
-export const Chive = require('./images/chive.jpg');
-export const Cucumber = require('./images/cucumber.jpg');
-export const FortuneCookie = require('./images/fortunecookie.jpg');
-export const Garlic = require('./images/garlic.jpg');
-export const Grape = require('./images/grape.jpg');
-export const Leek = require('./images/leek.jpg');
-export const Mango = require('./images/mango.jpg');
-export const Mushroom = require('./images/mushroom.jpg');
-export const Onion = require('./images/onion.jpg');
-export const Orange = require('./images/orange.jpg');
-export const Pineapple = require('./images/pineapple.jpg');
-export const Strawberry = require('./images/strawberry.jpg');
-export const Tomato = require('./images/tomato.jpg');
-export const Watermelon = require('./images/watermelon.jpg');
+const images = [
+  { id: 1, src: './images/apple.jpg', title: 'Apple' },
+  { id: 2, src: './images/babyspinach.jpg', title: 'Baby spinach' },
+  { id: 3, src: './images/banana.jpg', title: 'Banana' },
+  { id: 4, src: './images/blueberry.jpg', title: 'Blueberry' },
+  { id: 5, src: './images/broccoli.jpg', title: 'Broccoli' },
+  { id: 6, src: './images/cabbage.jpg', title: 'Cabbage' },
+  { id: 7, src: './images/carrot.jpg', title: 'Carrot' },
+  { id: 8, src: './images/chive.jpg', title: 'Chive' },
+  { id: 9, src: './images/cucumber.jpg', title: 'Cucumber' },
+  { id: 10, src: './images/fortunecookie.jpg', title: 'Fortune cookie' },
+  { id: 11, src: './images/garlic.jpg', title: 'Garlic' },
+  { id: 12, src: './images/grape.jpg', title: 'Grape' },
+  { id: 13, src: './images/leek.jpg', title: 'Leek' },
+  { id: 14, src: './images/mango.jpg', title: 'Mango' },
+  { id: 15, src: './images/mushroom.jpg', title: 'Mushroom' },
+  { id: 16, src: './images/onion.jpg', title: 'Onion' },
+  { id: 17, src: './images/orange.jpg', title: 'Orange' },
+  { id: 18, src: './images/pineapple.jpg', title: 'Pineapple' },
+  { id: 19, src: './images/strawberry.jpg', title: 'Strawberry' },
+  { id: 20, src: './images/tomato.jpg', title: 'Tomato' },
+  { id: 21, src: './images/watermelon.jpg', title: 'Watermelon' },
+];
+
+export default images;

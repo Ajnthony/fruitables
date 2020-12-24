@@ -2,22 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import Rating from './Rating';
+import images from './images';
 
 const Product = props => {
-  /* function importAllImages(r) {
-    let images = {};
-    r.keys().map((item, index) => {
-      images[item.replace('./', '')] = r(item);
-    });
-    return images;
-  }
-
-  const images = importAllImages(
-    require.context('./images', false, /\.(png|jpe?g|svg|gif)$/)
-  );
-
-  console.log(images); */
-
   return (
     <>
       <Card className='my-3 p-3 rounded'>
